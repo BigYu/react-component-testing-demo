@@ -2,22 +2,53 @@ import "jest";
 import * as React from "react";
 import { shallow } from "enzyme";
 
-import { Example, SfcExample } from "../src/index";
+import { MyInput } from "../src/index";
 
-describe("Example", () => {
+const createTestProps = (props = {}) => {
+  return {
+    initialValue: "",
+    onChange: (newValue: string): void => {
+      console.log(newValue);
+    },
+    validate: (value: string): boolean => {
+      return true;
+    },
+    ...props,
+  };
+};
+
+describe("MyInput", () => {
   it("renders correctly", () => {
+    const props = createTestProps();
     const wrapper = shallow(
-      <Example />,
+      <MyInput {...props} />,
     );
     expect(wrapper).toMatchSnapshot();
   });
-});
 
-describe("SfcExample", () => {
-  it("renders correctly", () => {
+  it("renders correctly with initial value", () => {
+    const props = createTestProps({
+      initialValue: "test init",
+    });
     const wrapper = shallow(
-      <SfcExample />,
+      <MyInput {...props} />,
     );
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it("validation works correctly", () => {
+    const props = createTestProps({
+      validate: (value: string) => {
+        return value.length < 10;
+      }
+    });
+    const wrapper = shallow(
+      <MyInput {...props} />,
+    );
+    expect(wrapper).toMatchSnapshot();
+    wrapper.find("input").simulate("onChange", { target: { value: "test" }});
+    expect(wrapper).toMatchSnapshot();
+    wrapper.find("input").simulate("onChange", { target: { value: "testtesttest" }});
     expect(wrapper).toMatchSnapshot();
   });
 });
