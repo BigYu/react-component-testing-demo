@@ -59,4 +59,43 @@ https://gist.github.com/fokusferit/e4558d384e4e9cab95d04e5f35d4f913
 
 # Basic setup
 
+## jest.config.js
+
+```js
+module.exports = {
+  setupFiles: [
+    '<rootDir>/setupTests.js'
+  ],
+  snapshotSerializers: ['enzyme-to-json/serializer'],
+  collectCoverageFrom: [
+    "**/*.{js,jsx,ts,tsx}",
+    "!**/node_modules/**",
+  ],
+};
+```
+## setupTest.js
+
+```js
+/** Jest test setup file. */
+
+const { configure } = require('enzyme');
+const Adapter = require('enzyme-adapter-react-16');
+const ReactDOM = require('react-dom');
+const { initializeIcons } = require('@uifabric/icons');
+
+// Initialize icons.
+initializeIcons('');
+
+// optional
+window.requestAnimationFrame = callback => {
+  setTimeout(callback, 0);
+};
+
+configure({ adapter: new Adapter() });
+
+// https://github.com/facebook/react/issues/11565
+ReactDOM.createPortal = node => node;
+
+```
+
 # Best practices
