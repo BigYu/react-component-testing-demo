@@ -33,14 +33,14 @@ Jest is a library for testing JavaScript code. It's an open source project maint
 
 ### Strengths of Mocha
 
-- Mocha’s greatest strength is its flexibility. It doesn’t come with an assertion library or mocking framework.
+- Mocha's greatest strength is its flexibility. It doesn't come with an assertion library or mocking framework.
 - a lot of tooling built up around Mocha.
 - the Mocha community is large.
 
 ### Weaknesses of Mocha
 
 - requires more configuration.
-- You can use snapshot testing with Mocha, but it’s not as easy to integrate.
+- You can use snapshot testing with Mocha, but it's not as easy to integrate.
 
 ## enzyme
 
@@ -99,3 +99,50 @@ ReactDOM.createPortal = node => node;
 ```
 
 # Best practices
+
+## Create a separate file with the global variables
+
+## Use 'describe' and 'it 'keywords appropriately in tests
+
+- 'describe' helps to decompose/break your test suite into components. It helps to break the tasks of a component and helps to visualize the big picture of the tests. Also, you can use nested 'describe' statements to further subdivide the test suite.
+- 'it' explains each test that you are going to perform. For example, in a component named 'Add', can have a test specified as “it('should render 2 \<input>s'……….”. You should not be able to subdivide tests further when you use 'it'.
+
+##  Main categories to test
+
+It is better if you can categorize the tests under ‘describe’ keyword. Following are some examples.
+
+- Rendering — You can categorize the tests like rendering components in a parent component. Examples: How many text boxes rendered?, Whether some element is rendered under some condition? etc.
+
+- Interactions — You can categorize the tests which help to check the interactions in UI. Examples: onClick method of a button, onChange method, state changes etc.
+
+- Lifecycle Method Calls — You can categorize tests which help to know whether a particular lifecycle method is called. Examples: To test componentDidMount method and associated state changes etc.
+
+## Things to be done Before and After tests
+
+```js
+beforeEach(() => { someInitializationFunction(); });
+afterEach(() => { someClearFunction(); });
+beforeAll(() => { someOneTimeInitializationFunction(); });
+afterAll(() => { someOneTimeClearFunction(); });
+```
+
+##  Passing props
+
+When there are more than one props to be passed it is better to use a separate function to create the props (createTestProps()) and assigned them to a variable (props) by calling the function inside beforeAll() or beforeEach() or in any place you need. Below is an example of such function usage.
+
+```js
+function createTestProps(props) {
+    return {
+        apiId: '6e770272-212b-404e-ab9c-333fdba02f2f',
+        cancelButton: true,
+        allComments: [],
+        theme: { custom: { maxCommentLength: 1300 } },
+        ...props,
+    };
+}
+let wrapper, props;
+beforeEach(() => {
+    props = createTestProps();
+    wrapper = shallow(<Comment {...props} /> );
+});
+```
