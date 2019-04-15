@@ -1,6 +1,6 @@
+import { shallow } from "enzyme";
 import "jest";
 import * as React from "react";
-import { shallow } from "enzyme";
 
 import { MyInput } from "../src/index";
 
